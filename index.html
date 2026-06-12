@@ -3,130 +3,179 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>สมัครสมาชิกสุดปั่น</title>
+<title>Space Register</title>
 
 <style>
 body{
     margin:0;
-    font-family:Arial,sans-serif;
-    background:linear-gradient(135deg,#6a11cb,#2575fc);
+    height:100vh;
+    overflow:hidden;
+    font-family:Arial;
+    background:black;
     display:flex;
     justify-content:center;
     align-items:center;
-    height:100vh;
+    color:white;
 }
 
+/* 🌌 พื้นหลังดาว */
+.stars, .stars2, .stars3{
+    position:absolute;
+    width:200%;
+    height:200%;
+    background-repeat:repeat;
+    background-image:
+    radial-gradient(2px 2px at 20px 30px, white, transparent),
+    radial-gradient(2px 2px at 40px 70px, white, transparent),
+    radial-gradient(1px 1px at 90px 40px, white, transparent),
+    radial-gradient(1px 1px at 130px 80px, white, transparent);
+    animation: moveStars 60s linear infinite;
+    opacity:0.5;
+}
+
+.stars2{ animation-duration:120s; opacity:0.3; }
+.stars3{ animation-duration:180s; opacity:0.2; }
+
+@keyframes moveStars{
+    from{transform:translateY(0px);}
+    to{transform:translateY(-1000px);}
+}
+
+/* กล่อง */
 .box{
-    background:white;
-    padding:30px;
+    position:relative;
+    z-index:2;
+    width:350px;
+    padding:25px;
     border-radius:15px;
-    width:400px;
-    box-shadow:0 0 20px rgba(0,0,0,.2);
+    background:rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    box-shadow:0 0 30px rgba(0,255,255,0.2);
 }
 
-h1{
-    text-align:center;
-}
-
+/* input */
 input{
     width:100%;
     padding:10px;
-    margin:8px 0;
-    box-sizing:border-box;
+    margin:6px 0;
+    border:none;
+    border-radius:8px;
+    outline:none;
 }
 
+/* ปุ่ม */
 button{
     width:100%;
-    padding:12px;
+    padding:10px;
     margin-top:10px;
     border:none;
     border-radius:8px;
-    background:#2575fc;
-    color:white;
     cursor:pointer;
-    font-size:16px;
+    background:#00c6ff;
+    color:black;
+    font-weight:bold;
 }
 
 button:hover{
-    background:#1257cc;
+    background:#00ffcc;
+}
+
+/* เอฟเฟกต์อีเมลหมุน */
+#email{
+    display:block;
+    transition:0.3s;
+}
+
+#username{
+    position:relative;
+    transition:0.1s;
+}
+
+/* glow text */
+h2{
+    text-align:center;
+    text-shadow:0 0 10px cyan;
 }
 
 #status{
-    margin-top:15px;
     text-align:center;
-    font-weight:bold;
+    margin-top:10px;
+    color:#00ffcc;
 }
 </style>
 </head>
 
 <body>
 
+<!-- 🌌 ดาว -->
+<div class="stars"></div>
+<div class="stars2"></div>
+<div class="stars3"></div>
+
 <div class="box">
-    <h1>สมัครสมาชิก</h1>
+    <h2>🚀 SPACE REGISTER</h2>
 
-    <label>ชื่อผู้ใช้</label>
-    <input type="text" id="username">
+    <input id="username" placeholder="ชื่อผู้ใช้ (จับให้ได้!)">
+    <input id="email" placeholder="อีเมล (กำลังหมุนในจักรวาล)">
 
-    <label>อีเมล</label>
-    <input type="email" id="email">
+    <input id="day" placeholder="วัน">
+    <input id="month" placeholder="เดือน">
+    <input id="year" placeholder="ปี">
 
-    <label>วัน/เดือน/ปีเกิด (สุ่ม)</label>
-    <input type="text" id="birthday" readonly>
-
-    <button onclick="stopRandom()">หยุดสุ่มวันเกิด</button>
-
-    <button onclick="registerUser()">ลงทะเบียน</button>
+    <button onclick="stopAll()">หยุดจักรวาลวันเกิด</button>
+    <button onclick="register()">สมัครเข้าสู่อวกาศ</button>
 
     <div id="status"></div>
 </div>
 
 <script>
 
-let randomTimer;
+// 🌠 ชื่อหนีเมาส์
+let username = document.getElementById("username");
+document.addEventListener("mousemove",(e)=>{
+    let x = (Math.random()*200)-100;
+    let y = (Math.random()*80)-40;
+    username.style.transform = `translate(${x}px,${y}px)`;
+});
 
-function generateDate(){
+// 🌌 อีเมลหมุน
+let email = document.getElementById("email");
+setInterval(()=>{
+    email.style.transform = `rotate(${Math.random()*360}deg)`;
+},500);
 
-    const day = Math.floor(Math.random()*31)+1;
-    const month = Math.floor(Math.random()*12)+1;
-    const year = Math.floor(Math.random()*50)+1975;
+// 🎲 สุ่มวันเกิด
+let d = setInterval(()=>{
+    document.getElementById("day").value = Math.floor(Math.random()*31)+1;
+},250);
 
-    document.getElementById("birthday").value =
-    `${day}/${month}/${year}`;
+let m = setInterval(()=>{
+    document.getElementById("month").value = Math.floor(Math.random()*12)+1;
+},500);
+
+let y = setInterval(()=>{
+    document.getElementById("year").value = Math.floor(Math.random()*60)+1960;
+},900);
+
+function stopAll(){
+    clearInterval(d);
+    clearInterval(m);
+    clearInterval(y);
+
+    document.getElementById("status").innerText =
+    "🪐 คุณหยุดเวลาในจักรวาลได้แล้ว!";
 }
 
-generateDate();
+// 🚀 สมัคร
+function register(){
+    let q = prompt("ยืนยันตัวตนจักรวาล: คุณเป็นสิ่งมีชีวิตหรือไม่?");
 
-randomTimer = setInterval(generateDate,2000);
-
-function stopRandom(){
-    clearInterval(randomTimer);
-
-    document.getElementById("status").innerHTML =
-    "✅ หยุดสุ่มวันเกิดแล้ว";
-}
-
-function registerUser(){
-
-    const username =
-    document.getElementById("username").value;
-
-    const email =
-    document.getElementById("email").value;
-
-    if(username === "" || email === ""){
-        alert("กรอกข้อมูลให้ครบก่อน");
-        return;
-    }
-
-    const answer = prompt("คุณเป็นเกย์ไหม? พิมพ์ 'ใช่' หรือ 'ไม่'");
-
-    if(answer === "ใช่"){
-        document.getElementById("status").innerHTML =
-        "🎉 สมัครสมาชิกสำเร็จ";
-    }
-    else{
-        document.getElementById("status").innerHTML =
-        "❌ สมัครสมาชิกไม่สำเร็จ";
+    if(q){
+        document.getElementById("status").innerText =
+        "✨ ยินดีต้อนรับสู่จักรวาล!";
+    }else{
+        document.getElementById("status").innerText =
+        "💥 ระบบงง แต่ให้ผ่านอยู่ดี";
     }
 }
 
