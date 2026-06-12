@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สมัครสมาชิกสุดปั่น</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:linear-gradient(135deg,#6a11cb,#2575fc);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.box{
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    width:400px;
+    box-shadow:0 0 20px rgba(0,0,0,.2);
+}
+
+h1{
+    text-align:center;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+    box-sizing:border-box;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:8px;
+    background:#2575fc;
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+}
+
+button:hover{
+    background:#1257cc;
+}
+
+#status{
+    margin-top:15px;
+    text-align:center;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+    <h1>สมัครสมาชิก</h1>
+
+    <label>ชื่อผู้ใช้</label>
+    <input type="text" id="username">
+
+    <label>อีเมล</label>
+    <input type="email" id="email">
+
+    <label>วัน/เดือน/ปีเกิด (สุ่ม)</label>
+    <input type="text" id="birthday" readonly>
+
+    <button onclick="stopRandom()">หยุดสุ่มวันเกิด</button>
+
+    <button onclick="registerUser()">ลงทะเบียน</button>
+
+    <div id="status"></div>
+</div>
+
+<script>
+
+let randomTimer;
+
+function generateDate(){
+
+    const day = Math.floor(Math.random()*31)+1;
+    const month = Math.floor(Math.random()*12)+1;
+    const year = Math.floor(Math.random()*50)+1975;
+
+    document.getElementById("birthday").value =
+    `${day}/${month}/${year}`;
+}
+
+generateDate();
+
+randomTimer = setInterval(generateDate,2000);
+
+function stopRandom(){
+    clearInterval(randomTimer);
+
+    document.getElementById("status").innerHTML =
+    "✅ หยุดสุ่มวันเกิดแล้ว";
+}
+
+function registerUser(){
+
+    const username =
+    document.getElementById("username").value;
+
+    const email =
+    document.getElementById("email").value;
+
+    if(username === "" || email === ""){
+        alert("กรอกข้อมูลให้ครบก่อน");
+        return;
+    }
+
+    const answer = prompt("คุณเป็นเกย์ไหม? พิมพ์ 'ใช่' หรือ 'ไม่'");
+
+    if(answer === "ใช่"){
+        document.getElementById("status").innerHTML =
+        "🎉 สมัครสมาชิกสำเร็จ";
+    }
+    else{
+        document.getElementById("status").innerHTML =
+        "❌ สมัครสมาชิกไม่สำเร็จ";
+    }
+}
+
+</script>
+
+</body>
+</html>
